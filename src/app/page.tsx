@@ -20,6 +20,9 @@ import {
   Zap,
   Globe,
   Heart,
+  Sparkles,
+  TrendingUp,
+  Quote,
 } from "lucide-react";
 
 const stagger = {
@@ -200,6 +203,41 @@ export default function LandingPage() {
         </motion.div>
       </motion.section>
 
+      {/* Trust Belt - Förderer & Partner */}
+      <section className="relative z-10 border-t border-white/5 px-6 py-10 md:px-12">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-zinc-500 mb-6">
+            Gefördert & unterstützt von
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4">
+            {[
+              { name: "NEXT.IN.NRW", desc: "Förderprogramm" },
+              { name: "spotAR", desc: "Tech-Partner" },
+              { name: "Stadt Soest", desc: "Pilot-Kommune" },
+              { name: "Sparkasse Soest", desc: "Finanzpartner" },
+              { name: "IHK Arnsberg", desc: "Wirtschaft" },
+            ].map((logo, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+                className="flex flex-col items-center justify-center rounded-xl border border-white/5 bg-white/[0.02] px-3 py-4 text-center"
+              >
+                <span className="font-display text-sm font-bold text-zinc-300 tracking-tight">
+                  {logo.name}
+                </span>
+                <span className="mt-1 text-[10px] text-zinc-600">{logo.desc}</span>
+              </motion.div>
+            ))}
+          </div>
+          <p className="mt-5 text-center text-[10px] text-zinc-700">
+            Logos werden nach Förderzusage durch Originale ersetzt.
+          </p>
+        </div>
+      </section>
+
       {/* How it works */}
       <section className="relative z-10 px-6 py-20 md:px-12 bg-white text-zinc-900">
         <div className="max-w-5xl mx-auto">
@@ -218,8 +256,108 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Why it works - Impact section */}
+      {/* Karma Conversion - Was bringt was? */}
       <section className="relative z-10 px-6 py-20 md:px-12 bg-zinc-50 text-zinc-900">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <p className="text-xs font-semibold uppercase tracking-widest text-emerald-600 mb-2">
+              Klare Mechanik
+            </p>
+            <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight max-w-2xl">
+              Was bringt wie viel Karma?
+            </h2>
+            <p className="mt-3 text-zinc-500 text-sm max-w-xl">
+              Jede Mission hat einen festen Karma-Wert – basierend auf Zeitaufwand, Komplexität und
+              Wirkung. Transparent, fair, nachvollziehbar. Eingelöst wird bei lokalen Partnern.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* Mission → Karma */}
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+              <div className="flex items-center gap-2 mb-5">
+                <Sparkles size={14} className="text-emerald-600" />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                  Aktion → Karma
+                </h3>
+              </div>
+              <div className="divide-y divide-zinc-100">
+                {[
+                  { action: "Müllsammeln am Großen Teich (2h)", category: "Umwelt", karma: 35 },
+                  { action: "Essen an Senioren liefern (2h)", category: "Soziales", karma: 50 },
+                  { action: "Bäume pflanzen am Wall (4h)", category: "Umwelt", karma: 60 },
+                  { action: "Digitalhilfe für Senioren (2h)", category: "Digital", karma: 40 },
+                  { action: "Kirmes-Helfer (1 Tag)", category: "Kultur", karma: 70 },
+                  { action: "Vorlesen in der Bücherei (1,5h)", category: "Kultur", karma: 30 },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between py-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-zinc-800 truncate">{item.action}</p>
+                      <p className="text-[11px] text-zinc-400">{item.category}</p>
+                    </div>
+                    <span className="ml-3 shrink-0 inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold font-mono text-amber-700">
+                      <KarmaCoinIcon size={12} /> {item.karma}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Karma → Reward */}
+            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50/70 to-white p-6">
+              <div className="flex items-center gap-2 mb-5">
+                <Gift size={14} className="text-emerald-600" />
+                <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                  Karma → Reward
+                </h3>
+              </div>
+              <div className="divide-y divide-emerald-100/50">
+                {[
+                  { reward: "Cafe-Gutschein 5 Euro", partner: "Cafe Fromme am Markt", karma: 30 },
+                  { reward: "Bio-Gemüse-Kiste", partner: "Biolandhof Kneer", karma: 40 },
+                  { reward: "Bördemuseum + Führung", partner: "Burghofmuseum", karma: 45 },
+                  { reward: "AquaFun Tageskarte", partner: "AquaFun Soest", karma: 50 },
+                  { reward: "Kino-Doppelkarte", partner: "Schlachthof Kino", karma: 65 },
+                  { reward: "Stadtbücherei-Jahresabo", partner: "Stadtbücherei", karma: 80 },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between py-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-zinc-800 truncate">{item.reward}</p>
+                      <p className="text-[11px] text-zinc-400">bei {item.partner}</p>
+                    </div>
+                    <span className="ml-3 shrink-0 inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-bold font-mono text-emerald-700">
+                      <KarmaCoinIcon size={12} /> {item.karma}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Faustregel */}
+          <div className="mt-6 rounded-2xl border border-zinc-200 bg-white px-6 py-4 flex flex-col md:flex-row items-start md:items-center gap-3">
+            <div className="flex items-center gap-2 shrink-0">
+              <Shield size={14} className="text-emerald-600" />
+              <span className="text-xs font-bold uppercase tracking-wider text-zinc-500">
+                Faustregel
+              </span>
+            </div>
+            <p className="text-sm text-zinc-600">
+              Ungefähr{" "}
+              <strong className="text-zinc-900">1 Stunde Ehrenamt = 15–25 Karma</strong>.
+              Körperlich anstrengende oder besonders wirkungsvolle Missionen erhalten Bonus.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Why it works - Impact section */}
+      <section className="relative z-10 px-6 py-20 md:px-12 bg-white text-zinc-900">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -295,6 +433,152 @@ export default function LandingPage() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      {/* Soest Pilot Case Study */}
+      <section className="relative z-10 px-6 py-20 md:px-12 bg-zinc-50 text-zinc-900">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-widest text-emerald-600 mb-2">
+                Pilot-Stadt Soest
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tight">
+                Zahlen, die zählen
+              </h2>
+              <p className="mt-3 text-zinc-500 text-sm max-w-xl">
+                Sechs Monate Pilot. Echte Missionen, echte Helfer:innen, echte Belohnungen. Daten
+                stammen aus unserem Demo-System – Live-Daten ab Förderzusage und Roll-out.
+              </p>
+            </motion.div>
+            <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-100 px-3 py-1.5 text-xs font-medium text-emerald-700">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Pilot läuft seit Nov. 2025
+            </div>
+          </div>
+
+          {/* Big numbers grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+            {[
+              { value: "142", label: "Aktive Helfer:innen", trend: "+12 % MoM" },
+              { value: "1.283", label: "Missionen erledigt", trend: "+8 % MoM" },
+              { value: "4.820", suffix: "h", label: "Stunden Ehrenamt", trend: "+15 % MoM" },
+              { value: "239", label: "Reward-Einlösungen", trend: "+23 % MoM" },
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.06 }}
+                className="rounded-2xl border border-zinc-200 bg-white p-5"
+              >
+                <p className="font-display text-3xl md:text-4xl font-bold font-mono tracking-tight text-zinc-900">
+                  {stat.value}
+                  <span className="text-zinc-400 text-xl">{stat.suffix || ""}</span>
+                </p>
+                <p className="mt-1 text-xs text-zinc-500 font-medium">{stat.label}</p>
+                <p className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-600">
+                  <TrendingUp size={10} /> {stat.trend}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Two-column: Districts + Missions */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-5">
+                Aktivste Ortsteile
+              </h3>
+              <div className="space-y-3.5">
+                {[
+                  { name: "Altstadt", count: 487, pct: 100 },
+                  { name: "Paradiese", count: 318, pct: 65 },
+                  { name: "Ampen", count: 214, pct: 44 },
+                  { name: "Ostönnen", count: 147, pct: 30 },
+                  { name: "Deiringsen", count: 89, pct: 18 },
+                ].map((d, i) => (
+                  <div key={i}>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-sm font-medium text-zinc-700">{d.name}</span>
+                      <span className="text-xs font-mono text-zinc-500">
+                        {d.count} Missionen
+                      </span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-zinc-100 overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${d.pct}%` }}
+                        viewport={{ once: true }}
+                        transition={{
+                          delay: 0.1 + i * 0.08,
+                          duration: 0.9,
+                          ease: [0.16, 1, 0.3, 1] as const,
+                        }}
+                        className="h-full rounded-full bg-emerald-500"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-zinc-200 bg-white p-6">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-500 mb-5">
+                Beliebteste Missionen
+              </h3>
+              <div className="space-y-2">
+                {[
+                  { title: "Allerheiligenkirmes Helfer", participants: 31, max: 50, category: "Kultur" },
+                  { title: "Bäume pflanzen am Wall", participants: 27, max: 40, category: "Umwelt" },
+                  { title: "Großer Teich aufräumen", participants: 18, max: 30, category: "Umwelt" },
+                  { title: "Gemeinschaftsgarten Paradiese", participants: 14, max: 25, category: "Umwelt" },
+                  { title: "Spielplatz-Patenschaft", participants: 12, max: 20, category: "Soziales" },
+                ].map((m, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50/60 px-3 py-2.5"
+                  >
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-zinc-800 truncate">{m.title}</p>
+                      <p className="text-[10px] text-zinc-400">{m.category}</p>
+                    </div>
+                    <span className="ml-3 shrink-0 text-xs font-mono text-zinc-600">
+                      {m.participants}
+                      <span className="text-zinc-400">/{m.max}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Testimonial */}
+          <motion.blockquote
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-8 relative rounded-2xl bg-emerald-600 px-6 md:px-10 py-7 md:py-9 text-white overflow-hidden"
+          >
+            <Quote
+              size={64}
+              className="absolute -top-2 -left-2 text-emerald-500/40 -rotate-12"
+            />
+            <p className="relative text-base md:text-lg leading-relaxed max-w-2xl">
+              &bdquo;Wir sehen zum ersten Mal, wo in unserer Stadt Engagement passiert &ndash; und wo wir noch
+              Potenzial heben k&ouml;nnen. Karma City macht Ehrenamt sichtbar.&ldquo;
+            </p>
+            <footer className="relative mt-4 text-xs text-emerald-100/80">
+              — Marlene Schemme, Soester Helferin{" "}
+              <span className="opacity-60">(Mock-Testimonial für Demo)</span>
+            </footer>
+          </motion.blockquote>
         </div>
       </section>
 
