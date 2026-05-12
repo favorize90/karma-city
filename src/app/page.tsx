@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { KarmaCoinIcon } from "@/components/KarmaCoin";
 import { cities, CityConfig } from "@/data/cityConfig";
@@ -81,10 +82,25 @@ export default function LandingPage() {
 
   return (
     <div className="relative bg-zinc-950 text-white overflow-hidden">
-      {/* Mesh gradient background */}
+      {/* Hero background image with multi-layer overlay */}
+      <div className="absolute top-0 left-0 right-0 h-[100dvh] md:h-[110vh] pointer-events-none overflow-hidden">
+        <Image
+          src="/assets/hero-community.jpg"
+          alt="Bürger:innen in der Soester Altstadt beim ehrenamtlichen Einsatz"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center scale-105"
+        />
+        {/* Layered overlays for legibility + brand mood */}
+        <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/85 to-zinc-950/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/30 via-transparent to-zinc-950" />
+      </div>
+
+      {/* Mesh gradient background (sits below hero image fadeout) */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="mesh-blob absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-emerald-500/20 blur-[120px]" />
-        <div className="mesh-blob-delayed absolute top-1/3 -right-20 h-[400px] w-[400px] rounded-full bg-lime-500/15 blur-[100px]" />
+        <div className="mesh-blob absolute -top-40 -left-40 h-[500px] w-[500px] rounded-full bg-emerald-500/15 blur-[120px]" />
+        <div className="mesh-blob-delayed absolute top-1/3 -right-20 h-[400px] w-[400px] rounded-full bg-teal-500/15 blur-[100px]" />
         <div className="mesh-blob absolute bottom-0 left-1/3 h-[300px] w-[300px] rounded-full bg-amber-500/10 blur-[80px]" />
       </div>
 
@@ -253,6 +269,44 @@ export default function LandingPage() {
             </h2>
           </motion.div>
           <ImpactChain />
+        </div>
+      </section>
+
+      {/* Mission imagery strip — show, don't tell */}
+      <section className="relative z-10 bg-white">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1 md:gap-1.5">
+          {[
+            { src: "/assets/mission-pond.jpg", label: "Müll sammeln am Großen Teich", category: "Umwelt" },
+            { src: "/assets/mission-trees.jpg", label: "Bäume pflanzen am Soester Wall", category: "Umwelt" },
+            { src: "/assets/mission-seniors.jpg", label: "Essen für Senioren liefern", category: "Soziales" },
+            { src: "/assets/mission-digital.jpg", label: "Digitalhilfe im Rathaus", category: "Digital" },
+          ].map((m, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.06, duration: 0.7, ease: [0.16, 1, 0.3, 1] as const }}
+              className="group relative aspect-[4/5] md:aspect-[3/4] overflow-hidden"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={m.src}
+                alt={m.label}
+                loading={i < 2 ? "eager" : "lazy"}
+                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/85 via-zinc-950/20 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-4 md:p-5">
+                <span className="inline-block rounded-full bg-white/15 backdrop-blur-md border border-white/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white mb-2">
+                  {m.category}
+                </span>
+                <p className="text-sm md:text-base font-bold text-white leading-tight">
+                  {m.label}
+                </p>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 
