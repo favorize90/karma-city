@@ -145,10 +145,10 @@ export default function LandingPage() {
             )}
           </div>
           <Link
-            href="/app"
+            href="/login"
             className="rounded-full bg-emerald-500 px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-400 active:scale-[0.97]"
           >
-            App starten
+            Anmelden
           </Link>
         </div>
       </nav>

@@ -17,6 +17,7 @@ import {
   Lock,
   Calendar,
   Settings,
+  LogOut,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -167,6 +168,34 @@ export default function ProfilePage() {
             </motion.div>
           ))}
         </div>
+      </motion.div>
+
+      {/* Account section with logout */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="mt-8 mb-2"
+      >
+        <h2 className="text-sm font-semibold text-zinc-700 mb-3">Konto</h2>
+        <form action="/logout" method="post">
+          <button
+            type="submit"
+            className="group flex w-full items-center justify-between rounded-2xl bg-white border border-zinc-100 px-4 py-3.5 text-left transition hover:border-rose-200 hover:bg-rose-50/40 active:scale-[0.99]"
+          >
+            <span className="flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-rose-50 text-rose-500 transition group-hover:bg-rose-100">
+                <LogOut size={14} />
+              </span>
+              <span>
+                <span className="block text-sm font-medium text-zinc-700">Abmelden</span>
+                <span className="block text-[11px] text-zinc-400">
+                  Du kannst dich jederzeit wieder anmelden
+                </span>
+              </span>
+            </span>
+          </button>
+        </form>
       </motion.div>
     </div>
   );
