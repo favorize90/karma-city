@@ -1,0 +1,22 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="coinD" cx="40%" cy="34%" r="78%">
+      <stop offset="0%" stop-color="#fef3c7"/>
+      <stop offset="55%" stop-color="#fcd34d"/>
+      <stop offset="100%" stop-color="#f59e0b"/>
+    </radialGradient>
+    <linearGradient id="leafD" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+  </defs>
+  <!-- Brighter variant so the mark pops on the near-black launch canvas -->
+  <g transform="translate(180,180) scale(13.83)">
+    <circle cx="24" cy="24" r="22" fill="#f59e0b"/>
+    <circle cx="24" cy="24" r="21" fill="#fbbf24"/>
+    <circle cx="24" cy="24" r="19" fill="url(#coinD)"/>
+    <circle cx="24" cy="24" r="17" fill="none" stroke="#d97706" stroke-width="1.1" stroke-dasharray="3 3" opacity="0.55"/>
+    <path d="M24 14c-3 0-8 4-8 10 0 5 3.5 8 8 10 4.5-2 8-5 8-10 0-6-5-10-8-10z" fill="url(#leafD)"/>
+    <path d="M24 18v12M24 18c-2 2-4 5-4 8" stroke="#f0fdf4" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>

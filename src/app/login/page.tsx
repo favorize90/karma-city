@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { Capacitor } from "@capacitor/core";
 import { createClient } from "@/lib/supabase/client";
 import { KarmaCoinIcon } from "@/components/KarmaCoin";
 import {
@@ -55,7 +56,10 @@ function LoginInner() {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") ?? "/app";
 
-  const [mode, setMode] = useState<Mode>("magic");
+  // In the native app the magic-link redirect can't return into the WebView
+  // (no Universal Links without an Apple account), so default to password there.
+  const isNative = Capacitor.isNativePlatform();
+  const [mode, setMode] = useState<Mode>(isNative ? "password" : "magic");
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

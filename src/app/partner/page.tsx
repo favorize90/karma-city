@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { KarmaCoinIcon } from "@/components/KarmaCoin";
+import { scanRewardCode } from "@/lib/scanner";
 import {
   ArrowLeft,
   ScanLine,
@@ -17,10 +18,19 @@ type ScanState = "idle" | "scanning" | "success";
 
 export default function PartnerPage() {
   const [scanState, setScanState] = useState<ScanState>("idle");
+  const [scannedCode, setScannedCode] = useState<string | null>(null);
 
-  const handleScan = () => {
+  const handleScan = async () => {
     setScanState("scanning");
-    setTimeout(() => setScanState("success"), 2000);
+    try {
+      // Native camera scan on device; falls back to the mock on web / simulator.
+      const { value } = await scanRewardCode();
+      setScannedCode(value);
+      setScanState("success");
+    } catch {
+      // User cancelled the native scanner → back to idle.
+      setScanState("idle");
+    }
   };
 
   return (
@@ -151,7 +161,7 @@ export default function PartnerPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-zinc-400">Code</span>
-                  <span className="font-mono text-xs text-zinc-600">KC-2026-0847</span>
+                  <span className="font-mono text-xs text-zinc-600">{scannedCode ?? "KC-2026-0847"}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-zinc-400">Eingelöst</span>
