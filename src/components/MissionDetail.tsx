@@ -2,9 +2,10 @@
 
 import { Mission, categoryLabels, categoryColors } from "@/data/mockData";
 import { KarmaCoinBadge } from "./KarmaCoin";
-import { MapPin, Clock, Star, Users, X, Building2, CheckCircle2, Camera, QrCode, Sparkles } from "lucide-react";
+import { MapPin, Clock, Star, Users, X, Building2, CheckCircle2, Camera, QrCode, Sparkles, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { joinMission } from "@/lib/db/actions";
 
 export function MissionDetail({
   mission,
@@ -15,13 +16,26 @@ export function MissionDetail({
 }) {
   const [signedUp, setSignedUp] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
   if (!mission) return null;
 
   const handleSignup = () => {
-    setSignedUp(true);
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 3000);
+    if (!mission) return;
+    setError(null);
+    startTransition(async () => {
+      const result = await joinMission(mission.id);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      setSignedUp(true);
+      if (!result.data?.alreadyJoined) {
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 3000);
+      }
+    });
   };
 
   return (
@@ -204,13 +218,27 @@ export function MissionDetail({
               ) : (
                 <motion.button
                   key="signup"
-                  whileTap={{ scale: 0.97, y: 1 }}
+                  whileTap={{ scale: isPending ? 1 : 0.97, y: isPending ? 0 : 1 }}
                   onClick={handleSignup}
-                  className="w-full rounded-[1.25rem] bg-zinc-900 py-4 text-sm font-bold text-white transition hover:bg-emerald-600 flex items-center justify-center gap-2"
+                  disabled={isPending}
+                  className="w-full rounded-[1.25rem] bg-zinc-900 py-4 text-sm font-bold text-white transition hover:bg-emerald-600 flex items-center justify-center gap-2 disabled:opacity-70 disabled:hover:bg-zinc-900"
                 >
-                  <Sparkles size={16} />
-                  Ich bin dabei  +{mission.coins} Karma-Punkte
+                  {isPending ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" /> Speichere Anmeldung...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={16} />
+                      Ich bin dabei  +{mission.coins} Karma-Punkte
+                    </>
+                  )}
                 </motion.button>
+              )}
+              {error && (
+                <p className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+                  {error}
+                </p>
               )}
             </AnimatePresence>
           </div>

@@ -1,20 +1,23 @@
 "use client";
 
-import { missions, currentUser, communityStats } from "@/data/mockData";
+import { missions, communityStats } from "@/data/mockData";
 import { CoinCounter } from "@/components/CoinCounter";
 import { MissionCard } from "@/components/MissionCard";
 import { MissionDetail } from "@/components/MissionDetail";
 import { Avatar } from "@/components/Avatar";
 import { KarmaCoinIcon } from "@/components/KarmaCoin";
 import { Mission } from "@/data/mockData";
+import { useProfile } from "@/components/UserProvider";
 import { Users, CheckCircle2, Coins, ArrowRight, Flame } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
 
 export default function DashboardPage() {
+  const profile = useProfile();
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
   const activeMissions = missions.slice(0, 4);
+  const greetingName = profile.display_name || profile.full_name?.split(" ")[0] || "Karma-Bürger";
 
   return (
     <div className="px-4 pt-6">
@@ -26,10 +29,15 @@ export default function DashboardPage() {
       >
         <div>
           <p className="text-xs text-zinc-400 font-medium uppercase tracking-wider">Willkommen zurück</p>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 font-display">{currentUser.name}</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 font-display">{greetingName}</h1>
         </div>
         <Link href="/app/profile">
-          <Avatar name={currentUser.fullName} seed={currentUser.avatar} size="lg" level={currentUser.level} />
+          <Avatar
+            name={profile.full_name || greetingName}
+            seed={profile.avatar_seed || profile.id}
+            size="lg"
+            level={profile.level}
+          />
         </Link>
       </motion.div>
 
@@ -40,7 +48,7 @@ export default function DashboardPage() {
         transition={{ delay: 0.1 }}
         className="mt-5"
       >
-        <CoinCounter value={currentUser.coins} />
+        <CoinCounter value={profile.coins} />
       </motion.div>
 
       {/* Streak indicator */}

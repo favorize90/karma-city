@@ -1,18 +1,36 @@
 "use client";
 
-import { useState } from "react";
-import { rewards, currentUser } from "@/data/mockData";
+import { useState, useTransition } from "react";
+import { rewards } from "@/data/mockData";
+import { useProfile } from "@/components/UserProvider";
 import { KarmaCoinBadge } from "@/components/KarmaCoin";
 import { motion, AnimatePresence } from "framer-motion";
-import { Gift, QrCode, CheckCircle2, ShoppingBag } from "lucide-react";
+import { Gift, QrCode, CheckCircle2, ShoppingBag, Loader2 } from "lucide-react";
+import { redeemReward } from "@/lib/db/actions";
 
 export default function RewardsPage() {
+  const profile = useProfile();
   const [tab, setTab] = useState<"shop" | "redeemed">("shop");
-  const [justRedeemed, setJustRedeemed] = useState<string | null>(null);
+  const [justRedeemed, setJustRedeemed] = useState<{ id: string; code: string } | null>(null);
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [, startTransition] = useTransition();
 
-  const handleRedeem = (rewardId: string) => {
-    setJustRedeemed(rewardId);
-    setTimeout(() => setJustRedeemed(null), 3000);
+  const handleRedeem = (rewardId: string, coinCost: number, title: string) => {
+    setError(null);
+    setPendingId(rewardId);
+    startTransition(async () => {
+      const result = await redeemReward(rewardId, coinCost, title);
+      setPendingId(null);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      if (result.data) {
+        setJustRedeemed({ id: rewardId, code: result.data.code });
+        setTimeout(() => setJustRedeemed(null), 4000);
+      }
+    });
   };
 
   return (
@@ -22,8 +40,14 @@ export default function RewardsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Belohnungen</h1>
           <p className="mt-1 text-sm text-zinc-400">Löse deine Karma Coins ein</p>
         </div>
-        <KarmaCoinBadge coins={currentUser.coins} size="md" />
+        <KarmaCoinBadge coins={profile.coins} size="md" />
       </div>
+
+      {error && (
+        <p className="mt-3 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+          {error}
+        </p>
+      )}
 
       {/* Tabs */}
       <div className="mt-5 flex rounded-xl bg-white border border-zinc-200 p-1">
@@ -48,8 +72,9 @@ export default function RewardsPage() {
       {tab === "shop" && (
         <div className="mt-5 space-y-3 pb-4">
           {rewards.map((reward, i) => {
-            const canAfford = currentUser.coins >= reward.coinCost;
-            const isJustRedeemed = justRedeemed === reward.id;
+            const canAfford = profile.coins >= reward.coinCost;
+            const isJustRedeemed = justRedeemed?.id === reward.id;
+            const isPending = pendingId === reward.id;
 
             return (
               <motion.div
@@ -103,15 +128,23 @@ export default function RewardsPage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             whileTap={{ scale: 0.95 }}
-                            onClick={() => canAfford && handleRedeem(reward.id)}
-                            disabled={!canAfford}
-                            className={`rounded-full px-3 py-1 text-[11px] font-medium transition ${
+                            onClick={() => canAfford && !isPending && handleRedeem(reward.id, reward.coinCost, reward.title)}
+                            disabled={!canAfford || isPending}
+                            className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-medium transition ${
                               canAfford
-                                ? "bg-karma-green text-white hover:bg-karma-green-dark"
+                                ? "bg-karma-green text-white hover:bg-karma-green-dark disabled:opacity-70"
                                 : "bg-zinc-100 text-zinc-400 cursor-not-allowed"
                             }`}
                           >
-                            {canAfford ? "Einlösen" : "Nicht genug Coins"}
+                            {isPending ? (
+                              <>
+                                <Loader2 size={11} className="animate-spin" /> Speichere...
+                              </>
+                            ) : canAfford ? (
+                              "Einlösen"
+                            ) : (
+                              "Nicht genug Coins"
+                            )}
                           </motion.button>
                         )}
                       </AnimatePresence>
@@ -126,10 +159,34 @@ export default function RewardsPage() {
 
       {tab === "redeemed" && (
         <div className="mt-5 space-y-3 pb-4">
-          {currentUser.redeemedRewards.length === 0 ? (
+          {justRedeemed ? (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-2xl border border-emerald-200/80 bg-white p-4"
+            >
+              <div className="flex items-center gap-4">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-100">
+                  <QrCode size={24} className="text-emerald-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-sm font-semibold text-zinc-800">
+                    {rewards.find((r) => r.id === justRedeemed.id)?.title}
+                  </h3>
+                  <p className="text-[11px] text-zinc-400">Eingelöst gerade eben</p>
+                  <p className="mt-1 font-mono text-xs text-zinc-700 bg-emerald-50 border border-emerald-100 rounded px-2 py-0.5 inline-block">
+                    {justRedeemed.code}
+                  </p>
+                </div>
+              </div>
+              <p className="mt-3 text-center text-[11px] text-zinc-400">
+                Beim Partner den Code zeigen. Volle Gutschein-Historie folgt im nächsten Sprint.
+              </p>
+            </motion.div>
+          ) : (
             <div className="mt-12 text-center">
               <Gift size={32} className="mx-auto text-zinc-300" />
-              <p className="mt-3 text-sm text-zinc-400">Noch keine Gutscheine eingelöst.</p>
+              <p className="mt-3 text-sm text-zinc-400">Noch keine frisch eingelösten Gutscheine.</p>
               <button
                 onClick={() => setTab("shop")}
                 className="mt-2 text-sm font-medium text-karma-green"
@@ -137,44 +194,6 @@ export default function RewardsPage() {
                 Zum Shop
               </button>
             </div>
-          ) : (
-            currentUser.redeemedRewards.map((r, i) => (
-              <motion.div
-                key={r.rewardId}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
-                className="rounded-2xl border border-zinc-200/60 bg-white p-4"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-emerald-50 border border-emerald-100">
-                    <QrCode size={24} className="text-emerald-600" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="text-sm font-semibold text-zinc-800">{r.title}</h3>
-                    <p className="text-[11px] text-zinc-400">Eingelöst am {new Date(r.redeemedDate).toLocaleDateString("de-DE")}</p>
-                    <p className="mt-1 font-mono text-xs text-zinc-500 bg-zinc-50 rounded px-2 py-0.5 inline-block">{r.code}</p>
-                  </div>
-                </div>
-
-                {/* QR Code placeholder */}
-                <div className="mt-3 flex items-center justify-center rounded-xl bg-zinc-50 border border-zinc-100 py-6">
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="grid grid-cols-5 gap-[2px]">
-                      {Array.from({ length: 25 }).map((_, j) => (
-                        <div
-                          key={j}
-                          className={`h-2.5 w-2.5 ${
-                            Math.random() > 0.4 ? "bg-zinc-800" : "bg-white"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <p className="text-[10px] text-zinc-400">QR-Code vorzeigen</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))
           )}
         </div>
       )}

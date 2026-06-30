@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { missions, MissionCategory } from "@/data/mockData";
 import { KarmaCoinIcon } from "@/components/KarmaCoin";
 import { MissionCard } from "@/components/MissionCard";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, Sparkles, Check, Leaf, Users, Palette, Monitor, UtensilsCrossed, Heart } from "lucide-react";
-import Link from "next/link";
+import { ArrowRight, ArrowLeft, Sparkles, Check, Leaf, Users, Palette, Monitor, UtensilsCrossed, Heart, Loader2 } from "lucide-react";
+import { saveOnboarding } from "@/lib/db/actions";
 
 const interests: { key: MissionCategory; label: string; icon: React.ElementType; color: string }[] = [
   { key: "environment", label: "Umwelt", icon: Leaf, color: "emerald" },
@@ -18,8 +19,11 @@ const interests: { key: MissionCategory; label: string; icon: React.ElementType;
 ];
 
 export default function OnboardingPage() {
+  const router = useRouter();
   const [step, setStep] = useState(0);
   const [selected, setSelected] = useState<Set<MissionCategory>>(new Set());
+  const [isPending, startTransition] = useTransition();
+  const [error, setError] = useState<string | null>(null);
 
   const toggleInterest = (key: MissionCategory) => {
     const next = new Set(selected);
@@ -29,6 +33,19 @@ export default function OnboardingPage() {
   };
 
   const recommended = missions.filter((m) => selected.has(m.category)).slice(0, 3);
+
+  const handleFinish = () => {
+    setError(null);
+    startTransition(async () => {
+      const result = await saveOnboarding(Array.from(selected), null);
+      if (result.error) {
+        setError(result.error);
+        return;
+      }
+      router.push("/app");
+      router.refresh();
+    });
+  };
 
   return (
     <div className="flex min-h-[100dvh] flex-col px-4 pt-10 pb-8 bg-white">
@@ -168,13 +185,36 @@ export default function OnboardingPage() {
               )}
             </div>
 
+            {error && (
+              <p className="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs text-rose-700">
+                {error}
+              </p>
+            )}
+
             <div className="mt-auto pt-8 flex gap-3">
-              <button onClick={() => setStep(1)} className="flex items-center gap-1 rounded-2xl border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-500">
+              <button
+                onClick={() => setStep(1)}
+                disabled={isPending}
+                className="flex items-center gap-1 rounded-2xl border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-500 disabled:opacity-50"
+              >
                 <ArrowLeft size={14} />
               </button>
-              <Link href="/app" className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-zinc-900 py-3 text-sm font-bold text-white transition hover:bg-emerald-600 active:scale-[0.98]">
-                Loslegen <ArrowRight size={16} />
-              </Link>
+              <motion.button
+                whileTap={{ scale: isPending ? 1 : 0.97 }}
+                onClick={handleFinish}
+                disabled={isPending}
+                className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-zinc-900 py-3 text-sm font-bold text-white transition hover:bg-emerald-600 active:scale-[0.98] disabled:opacity-70 disabled:hover:bg-zinc-900"
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" /> Speichere...
+                  </>
+                ) : (
+                  <>
+                    Loslegen <ArrowRight size={16} />
+                  </>
+                )}
+              </motion.button>
             </div>
           </motion.div>
         )}

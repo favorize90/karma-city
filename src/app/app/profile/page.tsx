@@ -1,9 +1,9 @@
 "use client";
 
-import { currentUser, achievements, levelConfig } from "@/data/mockData";
+import { achievements, levelConfig } from "@/data/mockData";
+import { useProfile, type ProfileLevel } from "@/components/UserProvider";
 import { Avatar } from "@/components/Avatar";
 import { CoinCounter } from "@/components/CoinCounter";
-import { KarmaCoinBadge } from "@/components/KarmaCoin";
 import { motion } from "framer-motion";
 import {
   Rocket,
@@ -15,7 +15,6 @@ import {
   Users,
   Trophy,
   Lock,
-  Calendar,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -31,10 +30,24 @@ const iconMap: Record<string, React.ElementType> = {
   trophy: Trophy,
 };
 
+const nextLevelMap: Record<ProfileLevel, { name: ProfileLevel; threshold: number } | null> = {
+  Bronze: { name: "Silber", threshold: 300 },
+  Silber: { name: "Gold", threshold: 700 },
+  Gold: { name: "Platin", threshold: 1200 },
+  Platin: null,
+};
+
 export default function ProfilePage() {
-  const coinsForCurrent = levelConfig[currentUser.level].min;
-  const coinsForNext = currentUser.coinsForNextLevel;
-  const progress = ((currentUser.totalCoinsEarned - coinsForCurrent) / (coinsForNext - coinsForCurrent)) * 100;
+  const profile = useProfile();
+  const coinsForCurrent = levelConfig[profile.level].min;
+  const next = nextLevelMap[profile.level];
+  const coinsForNext = next?.threshold ?? profile.total_coins_earned;
+  const nextLevelName = next?.name ?? profile.level;
+  const progress = next
+    ? ((profile.total_coins_earned - coinsForCurrent) / (coinsForNext - coinsForCurrent)) * 100
+    : 100;
+  const displayName =
+    profile.full_name || profile.display_name || "Karma-Bürger";
 
   return (
     <div className="px-4 pt-6 pb-4">
@@ -53,28 +66,37 @@ export default function ProfilePage() {
         className="mt-5 rounded-2xl bg-white border border-zinc-100 p-5"
       >
         <div className="flex items-center gap-4">
-          <Avatar name={currentUser.fullName} seed={currentUser.avatar} size="xl" level={currentUser.level} />
+          <Avatar
+            name={displayName}
+            seed={profile.avatar_seed || profile.id}
+            size="xl"
+            level={profile.level}
+          />
           <div>
-            <h2 className="text-lg font-bold text-zinc-800">{currentUser.fullName}</h2>
+            <h2 className="text-lg font-bold text-zinc-800">{displayName}</h2>
             <div className="mt-1 flex items-center gap-2">
-              <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${levelConfig[currentUser.level].bg} ${levelConfig[currentUser.level].color}`}>
-                {currentUser.level}
+              <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${levelConfig[profile.level].bg} ${levelConfig[profile.level].color}`}>
+                {profile.level}
               </span>
-              <span className="text-xs text-zinc-400">Rang #{currentUser.rank}</span>
+              {profile.district && (
+                <span className="text-xs text-zinc-400">{profile.district}</span>
+              )}
             </div>
-            <p className="mt-1 text-xs text-zinc-400">Dabei seit {new Date(currentUser.joinedDate).toLocaleDateString("de-DE", { month: "long", year: "numeric" })}</p>
+            <p className="mt-1 text-xs text-zinc-400">
+              Dabei seit {new Date(profile.joined_at).toLocaleDateString("de-DE", { month: "long", year: "numeric" })}
+            </p>
           </div>
         </div>
 
         <div className="mt-5">
-          <CoinCounter value={currentUser.coins} />
+          <CoinCounter value={profile.coins} />
         </div>
 
         {/* Level progress */}
         <div className="mt-5">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-medium text-zinc-600">{currentUser.level}</span>
-            <span className="font-medium text-zinc-600">{currentUser.nextLevel}</span>
+            <span className="font-medium text-zinc-600">{profile.level}</span>
+            <span className="font-medium text-zinc-600">{nextLevelName}</span>
           </div>
           <div className="mt-1.5 h-2.5 rounded-full bg-zinc-100 overflow-hidden">
             <motion.div
@@ -85,18 +107,24 @@ export default function ProfilePage() {
             />
           </div>
           <p className="mt-1.5 text-[11px] text-zinc-400">
-            Noch <span className="font-mono font-semibold text-zinc-600">{coinsForNext - currentUser.totalCoinsEarned}</span> Coins bis {currentUser.nextLevel}
+            {next ? (
+              <>
+                Noch <span className="font-mono font-semibold text-zinc-600">{Math.max(coinsForNext - profile.total_coins_earned, 0)}</span> Coins bis {nextLevelName}
+              </>
+            ) : (
+              <>Höchstes Level erreicht 🌟</>
+            )}
           </p>
         </div>
 
         {/* Quick stats */}
         <div className="mt-5 grid grid-cols-2 gap-3">
           <div className="rounded-xl bg-zinc-50 p-3 text-center">
-            <p className="text-xl font-bold font-mono text-zinc-800">{currentUser.missionsCompleted}</p>
+            <p className="text-xl font-bold font-mono text-zinc-800">{profile.missions_completed}</p>
             <p className="text-[10px] text-zinc-400 font-medium">Missionen</p>
           </div>
           <div className="rounded-xl bg-zinc-50 p-3 text-center">
-            <p className="text-xl font-bold font-mono text-zinc-800">{currentUser.totalCoinsEarned}</p>
+            <p className="text-xl font-bold font-mono text-zinc-800">{profile.total_coins_earned}</p>
             <p className="text-[10px] text-zinc-400 font-medium">Coins verdient</p>
           </div>
         </div>
@@ -145,29 +173,24 @@ export default function ProfilePage() {
         className="mt-6"
       >
         <h2 className="text-sm font-semibold text-zinc-700 mb-3">Letzte Aktivitäten</h2>
-        <div className="space-y-2">
-          {currentUser.completedMissions.map((cm, i) => (
-            <motion.div
-              key={cm.missionId + cm.date}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.35 + i * 0.05 }}
-              className="flex items-center gap-3 rounded-2xl bg-white border border-zinc-100 px-4 py-3"
-            >
-              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-50">
-                <Trophy size={14} className="text-emerald-600" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-zinc-700 truncate">{cm.title}</p>
-                <p className="text-[11px] text-zinc-400 flex items-center gap-1">
-                  <Calendar size={10} />
-                  {new Date(cm.date).toLocaleDateString("de-DE")}
-                </p>
-              </div>
-              <KarmaCoinBadge coins={cm.coinsEarned} size="sm" />
-            </motion.div>
-          ))}
-        </div>
+        {profile.missions_completed === 0 ? (
+          <div className="rounded-2xl bg-white border border-zinc-100 px-4 py-6 text-center">
+            <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50">
+              <Trophy size={16} className="text-emerald-600" />
+            </div>
+            <p className="text-sm font-medium text-zinc-700">Noch keine Missionen abgeschlossen</p>
+            <p className="mt-1 text-[11px] text-zinc-400">
+              Finde deine erste Mission und sammle deine ersten Karma-Punkte.
+            </p>
+          </div>
+        ) : (
+          <div className="rounded-2xl bg-white border border-zinc-100 px-4 py-4 text-center">
+            <p className="text-xs text-zinc-400">
+              <span className="font-mono font-semibold text-zinc-700">{profile.missions_completed}</span> Missionen abgeschlossen.
+              Detaillierte Historie folgt im nächsten Sprint.
+            </p>
+          </div>
+        )}
       </motion.div>
 
       {/* Account section with logout */}

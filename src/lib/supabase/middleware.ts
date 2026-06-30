@@ -58,5 +58,19 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  // Force unfinished onboarding through the wizard
+  if (user && isProtected && !pathname.startsWith("/app/onboarding")) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("onboarding_completed")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (profile && !profile.onboarding_completed) {
+      const redirectUrl = request.nextUrl.clone();
+      redirectUrl.pathname = "/app/onboarding";
+      return NextResponse.redirect(redirectUrl);
+    }
+  }
+
   return supabaseResponse;
 }
