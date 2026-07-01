@@ -97,19 +97,41 @@ function LoginInner() {
     if (!supabase) return;
     setError(null);
     setLoading("password");
-    const action = isSignup
-      ? supabase.auth.signUp({
+
+    if (isSignup) {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${location.origin}/auth/callback?redirect=${encodeURIComponent(redirectTo)}`,
+        },
+      });
+      if (error) {
+        setLoading(null);
+        setError(error.message);
+        return;
+      }
+      // Accounts are auto-confirmed (demo mode) — no confirmation mail in the
+      // flow. If signUp didn't return a session, sign in directly.
+      if (!data.session) {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
-          options: {
-            emailRedirectTo: `${location.origin}/auth/callback?redirect=${encodeURIComponent(redirectTo)}`,
-          },
-        })
-      : supabase.auth.signInWithPassword({ email, password });
-    const { error } = await action;
+        });
+        if (signInError) {
+          // Genuine confirmation still pending (should not happen in demo mode).
+          setLoading(null);
+          setMode("magic-sent");
+          return;
+        }
+      }
+      router.push(redirectTo);
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(null);
     if (error) setError(error.message);
-    else if (isSignup) setMode("magic-sent");
     else router.push(redirectTo);
   };
 
