@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { missions, MissionCategory } from "@/data/mockData";
 import { KarmaCoinIcon } from "@/components/KarmaCoin";
 import { MissionCard } from "@/components/MissionCard";
@@ -19,7 +18,6 @@ const interests: { key: MissionCategory; label: string; icon: React.ElementType;
 ];
 
 export default function OnboardingPage() {
-  const router = useRouter();
   const [step, setStep] = useState(0);
   const [selected, setSelected] = useState<Set<MissionCategory>>(new Set());
   const [isPending, startTransition] = useTransition();
@@ -42,8 +40,9 @@ export default function OnboardingPage() {
         setError(result.error);
         return;
       }
-      router.push("/app");
-      router.refresh();
+      // Hard navigation on purpose: the router cache may still hold the
+      // "onboarding incomplete" redirect for /app and would bounce back here.
+      window.location.assign("/app");
     });
   };
 

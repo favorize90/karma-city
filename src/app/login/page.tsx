@@ -2,7 +2,7 @@
 
 import { Suspense, useState } from "react";
 import Link from "next/link";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Capacitor } from "@capacitor/core";
 import { createClient } from "@/lib/supabase/client";
@@ -52,7 +52,6 @@ function AppleIcon({ size = 16 }: { size?: number }) {
 }
 
 function LoginInner() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") ?? "/app";
 
@@ -125,14 +124,22 @@ function LoginInner() {
           return;
         }
       }
-      router.push(redirectTo);
+      // Hard navigation on purpose: after a client-side login the Next.js
+      // router cache may still hold the pre-auth redirect for /app and would
+      // bounce the user back to /login. A full page load re-runs middleware
+      // with the fresh session cookies.
+      window.location.assign(redirectTo);
       return;
     }
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(null);
-    if (error) setError(error.message);
-    else router.push(redirectTo);
+    if (error) {
+      setLoading(null);
+      setError(error.message);
+      return;
+    }
+    // Hard navigation — see comment above.
+    window.location.assign(redirectTo);
   };
 
   const handleOAuth = async (provider: "google" | "apple") => {
