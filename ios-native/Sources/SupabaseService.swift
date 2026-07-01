@@ -1,26 +1,53 @@
 import Foundation
 import Supabase
 
-/// Central Supabase gateway for the native app. Session persistence lives in
-/// the Keychain (handled by supabase-swift) — no cookie fragility.
+/// Session storage backed by UserDefaults.
+///
+/// Demo/pilot tradeoff: the default KeychainLocalStorage silently loses the
+/// session in unsigned/ad-hoc builds (errSecMissingEntitlement), which made
+/// data requests run unauthenticated after login. UserDefaults persists in
+/// every build type. Before a public store release, switch back to the
+/// Keychain (signed builds) for at-rest encryption of the refresh token.
+struct UserDefaultsLocalStorage: AuthLocalStorage {
+    private let defaults = UserDefaults.standard
+
+    func store(key: String, value: Data) throws {
+        defaults.set(value, forKey: key)
+    }
+
+    func retrieve(key: String) throws -> Data? {
+        defaults.data(forKey: key)
+    }
+
+    func remove(key: String) throws {
+        defaults.removeObject(forKey: key)
+    }
+}
+
+/// Central Supabase gateway for the native app.
 @MainActor
 final class AppState: ObservableObject {
     static let shared = AppState()
 
     let client = SupabaseClient(
         supabaseURL: URL(string: "https://jwztffvzmuegeihrrfep.supabase.co")!,
-        supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3enRmZnZ6bXVlZ2VpaHJyZmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NzYwNDMsImV4cCI6MjA5MzA1MjA0M30.YmevuYd0qgA_KjtvGj4JGhYZ3COBz4iI80TMqooT0Oc"
+        supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp3enRmZnZ6bXVlZ2VpaHJyZmVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc0NzYwNDMsImV4cCI6MjA5MzA1MjA0M30.YmevuYd0qgA_KjtvGj4JGhYZ3COBz4iI80TMqooT0Oc",
+        options: SupabaseClientOptions(
+            auth: .init(storage: UserDefaultsLocalStorage())
+        )
     )
 
     @Published var session: Session?
     @Published var profile: Profile?
     @Published var bootstrapped = false
+    @Published var profileError: String?
 
     private init() {}
 
     /// Start listening for auth changes; resolves the initial session.
     func bootstrap() async {
         for await change in client.auth.authStateChanges {
+            NSLog("KC bootstrap event=%@ session=%@", String(describing: change.event), change.session == nil ? "nil" : "vorhanden")
             session = change.session
             if change.session != nil {
                 await refreshProfile()
@@ -32,7 +59,10 @@ final class AppState: ObservableObject {
     }
 
     func refreshProfile() async {
-        guard let uid = session?.user.id else { return }
+        guard let uid = session?.user.id else {
+            NSLog("KC refreshProfile: keine Session")
+            return
+        }
         do {
             let result: Profile = try await client
                 .from("profiles")
@@ -42,8 +72,11 @@ final class AppState: ObservableObject {
                 .execute()
                 .value
             profile = result
+            profileError = nil
+            NSLog("KC profile geladen: %@ coins=%d", result.greetingName, result.coins)
         } catch {
-            print("profile load failed: \(error)")
+            profileError = "Profil konnte nicht geladen werden: \(error.localizedDescription)"
+            NSLog("KC profile load FAILED: %@", String(describing: error))
         }
     }
 

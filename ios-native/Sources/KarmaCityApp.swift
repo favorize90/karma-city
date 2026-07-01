@@ -29,10 +29,36 @@ struct RootView: View {
                 }
             } else if app.session == nil {
                 LoginView()
-            } else if let profile = app.profile, !profile.onboardingCompleted {
-                OnboardingView()
+            } else if let profile = app.profile {
+                if profile.onboardingCompleted {
+                    MainTabView()
+                } else {
+                    OnboardingView()
+                }
             } else {
-                MainTabView()
+                // Session exists but the profile hasn't arrived: show progress,
+                // surface errors with a retry instead of hanging forever.
+                VStack(spacing: 20) {
+                    CoinIcon(size: 64)
+                    if let error = app.profileError {
+                        ErrorBanner(message: error)
+                            .padding(.horizontal, 24)
+                        PrimaryButton(title: "Erneut versuchen") {
+                            Task { await app.refreshProfile() }
+                        }
+                        .padding(.horizontal, 48)
+                        Button("Abmelden") {
+                            Task { await app.signOut() }
+                        }
+                        .font(.footnote)
+                        .foregroundStyle(Theme.textTertiary)
+                    } else {
+                        ProgressView().tint(Theme.emerald)
+                        Text("Profil wird geladen …")
+                            .font(.footnote)
+                            .foregroundStyle(Theme.textTertiary)
+                    }
+                }
             }
         }
         .animation(.easeInOut(duration: 0.25), value: app.session != nil)
