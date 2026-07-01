@@ -1,0 +1,415 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3127F69A65DAF5B7CFAD4EC7 /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E065F4C54BA981A9801B79 /* LeaderboardView.swift */; };
+		31A15A0CC777098E0CC6D12D /* SupabaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C934989C260537DA3590186A /* SupabaseService.swift */; };
+		4C423EC71215D8BCEADF3652 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2278154CBC98EC19B907DD09 /* Components.swift */; };
+		57D3B62018AF245CA1E6DF00 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09E5584925ABF2F2782ED5FF /* Models.swift */; };
+		59FABF68778F268CA3E2BA2B /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991D1EE67777F85251B772BF /* ProfileView.swift */; };
+		61B190C7C6535CD5F7275405 /* KarmaCityApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52EC3AA531BF2A4C8E8C556 /* KarmaCityApp.swift */; };
+		7A840E780E490039693D4640 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F20C554578A396488A6AE02 /* LoginView.swift */; };
+		7C2275DA7045E110350DF857 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C555552E5774711F4988F0A /* MainTabView.swift */; };
+		980589496A5DF1F928762B3D /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98477726F3ACE121681E7116 /* Theme.swift */; };
+		A011F9FFE4C4808DCF141234 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B237183C5139EA6853545DBD /* DashboardView.swift */; };
+		B9BCA8EFE8615D6334C9E9EE /* RewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 321535865BC9494B6B82DC24 /* RewardsView.swift */; };
+		BE12DF30AC1E9460F2277E07 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 24F41573FEBC796139DD37BC /* Supabase */; };
+		E5739AB0E9A3277B528860FA /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC483A726A7F1BFE8880F03 /* OnboardingView.swift */; };
+		F623D1CF0B8E989ABF92E993 /* MissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08E7669D7FECF4851EA3155 /* MissionsView.swift */; };
+		FB926B17553C91BE7ECC0C71 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 172F728C8A8548C6742AA73D /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		09E5584925ABF2F2782ED5FF /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		172F728C8A8548C6742AA73D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2278154CBC98EC19B907DD09 /* Components.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Components.swift; sourceTree = "<group>"; };
+		321535865BC9494B6B82DC24 /* RewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardsView.swift; sourceTree = "<group>"; };
+		3C555552E5774711F4988F0A /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		4F20C554578A396488A6AE02 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		5AC483A726A7F1BFE8880F03 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		79E065F4C54BA981A9801B79 /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
+		98477726F3ACE121681E7116 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		991D1EE67777F85251B772BF /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		ADBF9C5B0AB3ED7E23D50585 /* KarmaCity.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = KarmaCity.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B237183C5139EA6853545DBD /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		C08E7669D7FECF4851EA3155 /* MissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MissionsView.swift; sourceTree = "<group>"; };
+		C52EC3AA531BF2A4C8E8C556 /* KarmaCityApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KarmaCityApp.swift; sourceTree = "<group>"; };
+		C934989C260537DA3590186A /* SupabaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupabaseService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		12D8E7BAF135B0094A48F8C4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BE12DF30AC1E9460F2277E07 /* Supabase in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		635349AF5F1CC3E4EE9C0EC1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ADBF9C5B0AB3ED7E23D50585 /* KarmaCity.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		810AD5DE000D6EFB1B847670 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				172F728C8A8548C6742AA73D /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		870CCD1000A6AE1317FBD479 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2278154CBC98EC19B907DD09 /* Components.swift */,
+				C52EC3AA531BF2A4C8E8C556 /* KarmaCityApp.swift */,
+				09E5584925ABF2F2782ED5FF /* Models.swift */,
+				C934989C260537DA3590186A /* SupabaseService.swift */,
+				98477726F3ACE121681E7116 /* Theme.swift */,
+				E8224FCDCC25453269D4237C /* Views */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		C13610F8A03E7CBB0B1A8990 = {
+			isa = PBXGroup;
+			children = (
+				810AD5DE000D6EFB1B847670 /* Resources */,
+				870CCD1000A6AE1317FBD479 /* Sources */,
+				635349AF5F1CC3E4EE9C0EC1 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E8224FCDCC25453269D4237C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B237183C5139EA6853545DBD /* DashboardView.swift */,
+				79E065F4C54BA981A9801B79 /* LeaderboardView.swift */,
+				4F20C554578A396488A6AE02 /* LoginView.swift */,
+				3C555552E5774711F4988F0A /* MainTabView.swift */,
+				C08E7669D7FECF4851EA3155 /* MissionsView.swift */,
+				5AC483A726A7F1BFE8880F03 /* OnboardingView.swift */,
+				991D1EE67777F85251B772BF /* ProfileView.swift */,
+				321535865BC9494B6B82DC24 /* RewardsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5AA149F7E854DC7F302D192B /* KarmaCity */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9FE8BDAE9408B35788FD8A34 /* Build configuration list for PBXNativeTarget "KarmaCity" */;
+			buildPhases = (
+				20C42C8363E3305B6DD9A067 /* Sources */,
+				6973BAD56AECD2C0E2AB5F3E /* Resources */,
+				12D8E7BAF135B0094A48F8C4 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = KarmaCity;
+			packageProductDependencies = (
+				24F41573FEBC796139DD37BC /* Supabase */,
+			);
+			productName = KarmaCity;
+			productReference = ADBF9C5B0AB3ED7E23D50585 /* KarmaCity.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		67621C3D9E5B33644EFAD025 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 9AFFDF7B9188F850789B79DC /* Build configuration list for PBXProject "KarmaCity" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C13610F8A03E7CBB0B1A8990;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				21F7DF27208D3232C44C5D4E /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 635349AF5F1CC3E4EE9C0EC1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5AA149F7E854DC7F302D192B /* KarmaCity */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6973BAD56AECD2C0E2AB5F3E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB926B17553C91BE7ECC0C71 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		20C42C8363E3305B6DD9A067 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4C423EC71215D8BCEADF3652 /* Components.swift in Sources */,
+				A011F9FFE4C4808DCF141234 /* DashboardView.swift in Sources */,
+				61B190C7C6535CD5F7275405 /* KarmaCityApp.swift in Sources */,
+				3127F69A65DAF5B7CFAD4EC7 /* LeaderboardView.swift in Sources */,
+				7A840E780E490039693D4640 /* LoginView.swift in Sources */,
+				7C2275DA7045E110350DF857 /* MainTabView.swift in Sources */,
+				F623D1CF0B8E989ABF92E993 /* MissionsView.swift in Sources */,
+				57D3B62018AF245CA1E6DF00 /* Models.swift in Sources */,
+				E5739AB0E9A3277B528860FA /* OnboardingView.swift in Sources */,
+				59FABF68778F268CA3E2BA2B /* ProfileView.swift in Sources */,
+				B9BCA8EFE8615D6334C9E9EE /* RewardsView.swift in Sources */,
+				31A15A0CC777098E0CC6D12D /* SupabaseService.swift in Sources */,
+				980589496A5DF1F928762B3D /* Theme.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		3101F9ADFD5B03A8010501B4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Karma City";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Karma City scannt QR-Codes, um deine Missionen und Belohnungen zu bestätigen.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.karmacity.ios;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		87543DDDBC7ED20890D57961 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		EA4697E15EDB5B52CD4EE2FD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		F22FEFDACD2D3E7C91FF521D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Karma City";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Karma City scannt QR-Codes, um deine Missionen und Belohnungen zu bestätigen.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.karmacity.ios;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9AFFDF7B9188F850789B79DC /* Build configuration list for PBXProject "KarmaCity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				87543DDDBC7ED20890D57961 /* Debug */,
+				EA4697E15EDB5B52CD4EE2FD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9FE8BDAE9408B35788FD8A34 /* Build configuration list for PBXNativeTarget "KarmaCity" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F22FEFDACD2D3E7C91FF521D /* Debug */,
+				3101F9ADFD5B03A8010501B4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		21F7DF27208D3232C44C5D4E /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		24F41573FEBC796139DD37BC /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 21F7DF27208D3232C44C5D4E /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 67621C3D9E5B33644EFAD025 /* Project object */;
+}
