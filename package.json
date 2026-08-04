@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "smoke": "node scripts/smoke.mjs",
+    "verify": "bash scripts/verify.sh"
   },
   "dependencies": {
     "@capacitor-mlkit/barcode-scanning": "^8.1.0",

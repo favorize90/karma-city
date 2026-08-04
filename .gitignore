@@ -42,3 +42,7 @@ next-env.d.ts
 .claude/worktrees/
 .claude/skills/
 .claude/settings.local.json
+
+# overnight loop run artifacts (GOAL/BACKLOG/PROGRESS stay tracked)
+.claude/overnight/logs/
+.claude/overnight/last-verify.md
