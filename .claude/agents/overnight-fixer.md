@@ -34,6 +34,11 @@ Fix the specific failure in the report you were given. Then prove it.
   `--skip-smoke` in a report you call green. Turning a red gate green by
   removing the gate is the single worst thing you can do here, because it
   silently disarms every remaining iteration of the night.
+- **The Karma economy is server-authoritative.** Coin amounts, prices,
+  levels and the ledger are written only by the `complete_mission` /
+  `redeem_reward` RPCs, which read values from the database. Never grant
+  clients write access to those columns, never send a price or reward from
+  the client, and never delete or loosen a check in `supabase/tests/`.
 - **Never `git commit`, `push`, `reset`, `checkout` or `stash`** — the loop
   owns history and rollback.
 - **Never edit** `.claude/overnight/GOAL.md`, `BACKLOG.md` or `PROGRESS.md`.

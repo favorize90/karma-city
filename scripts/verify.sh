@@ -12,6 +12,10 @@
 #   scripts/verify.sh --skip-smoke # gates only, no server boot
 #   scripts/verify.sh --only build # run a single stage
 #
+# The db stage runs the SQL security suite (scripts/test-db.sh) when
+# TEST_DATABASE_URL points at a throwaway Postgres; without it the stage is
+# reported as skipped, never as passed.
+#
 # Exit codes: 0 = all green, 1 = a stage failed, 2 = harness/setup problem.
 
 set -uo pipefail
@@ -62,6 +66,7 @@ stage_timeout() {
   case "$1" in
     typecheck) echo 300 ;;
     lint)      echo 300 ;;
+    db)        echo 180 ;;
     build)     echo 900 ;;
     smoke)     echo 360 ;;
     *)         echo 600 ;;
@@ -109,6 +114,11 @@ run_stage() {
 
 run_stage typecheck npx --no-install tsc --noEmit
 run_stage lint      npm run --silent lint
+if [ -n "${TEST_DATABASE_URL:-}" ]; then
+  run_stage db      bash scripts/test-db.sh
+else
+  RESULTS+=("skip|db|TEST_DATABASE_URL not set — RLS and RPC security suite did not run")
+fi
 run_stage build     npm run --silent build
 if [ "$SKIP_SMOKE" -eq 0 ]; then
   run_stage smoke   node scripts/smoke.mjs

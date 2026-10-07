@@ -9,6 +9,7 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "smoke": "node scripts/smoke.mjs",
+    "test:db": "bash scripts/test-db.sh",
     "verify": "bash scripts/verify.sh"
   },
   "dependencies": {

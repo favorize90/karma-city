@@ -39,6 +39,11 @@ Not two. Not "and while I was in there". One.
 - **Never weaken a gate to make it pass** — no `// @ts-ignore`, no eslint
   disables, no deleting an assertion, no removing a route from the smoke list.
   If a gate is wrong, say so in your report and leave it failing.
+- **The Karma economy is server-authoritative.** Coin amounts, prices,
+  levels and the ledger are written only by the `complete_mission` /
+  `redeem_reward` RPCs, which read values from the database. Never grant
+  clients write access to those columns, never send a price or reward from
+  the client, and never delete or loosen a check in `supabase/tests/`.
 - **Never touch** `supabase/migrations/` files that already exist. Add a new
   numbered migration instead; earlier ones may already be applied.
 - Do not run `scripts/verify.sh` — that is the tester's job and it is slow.

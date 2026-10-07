@@ -103,7 +103,7 @@ export default function PartnerPage() {
                   <div className="flex-1 h-px bg-zinc-100" />
                 </div>
                 <input
-                  placeholder="Code eingeben (z.B. KC-2026-0847)"
+                  placeholder="Code eingeben (z.B. KC-7F3A2-91C0E)"
                   className="w-full rounded-xl border border-zinc-200 bg-zinc-50 py-3 px-4 text-sm text-center font-mono text-zinc-600 placeholder:text-zinc-300 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-100"
                 />
               </div>
@@ -161,7 +161,7 @@ export default function PartnerPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-zinc-400">Code</span>
-                  <span className="font-mono text-xs text-zinc-600">{scannedCode ?? "KC-2026-0847"}</span>
+                  <span className="font-mono text-xs text-zinc-600">{scannedCode ?? "KC-7F3A2-91C0E"}</span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-zinc-400">Eingelöst</span>

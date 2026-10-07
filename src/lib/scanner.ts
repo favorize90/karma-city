@@ -13,7 +13,7 @@ import { Capacitor } from "@capacitor/core";
  *   it falls back to the mock instead of throwing — the pitch demo never breaks.
  */
 
-const MOCK_CODE = "KC-2026-0847";
+const MOCK_CODE = "KC-7F3A2-91C0E";
 
 export interface ScanOutcome {
   value: string; // decoded QR / reward code

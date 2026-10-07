@@ -96,8 +96,9 @@ distrust.
 - Never push to `main`. Only the branch named in GOAL.md.
 - Never commit red. The gates decide, not your judgement of the diff.
 - Never weaken a gate, and reject any subagent report that did — treat a
-  `@ts-ignore`, an eslint-disable, a deleted assertion or a removed smoke
-  route as a **failed** iteration and roll back.
+  `@ts-ignore`, an eslint-disable, a deleted assertion, a removed smoke
+  route, a loosened check in `supabase/tests/` or a new client grant on a
+  coin, level or ledger column as a **failed** iteration and roll back.
 - Never add a backlog item mid-iteration. Discoveries go in the PROGRESS
   `Next:` line; the human triages them in the morning.
 - One item per iteration. Scope creep at 3am is unreviewable by 8am.

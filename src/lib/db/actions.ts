@@ -34,65 +34,20 @@ export async function joinMission(missionId: string): Promise<Result<{ alreadyJo
   return { data: { alreadyJoined: false } };
 }
 
-export async function completeMission(
-  missionId: string,
-  coinsEarned: number,
-): Promise<Result> {
-  const { supabase, user } = await requireUser();
+// Coin values are never taken from the caller. Both RPCs read the price or
+// reward from the database and apply every write in one transaction (see
+// supabase/migrations/0007_server_authoritative_karma.sql). Their p_coins,
+// p_coin_cost and p_title parameters are ignored server-side and only exist
+// so shipped iOS builds keep working.
 
-  const { data: participation, error: pErr } = await supabase
-    .from("mission_participants")
-    .select("id, completed_at")
-    .eq("user_id", user.id)
-    .eq("mission_id", missionId)
-    .maybeSingle();
+export async function completeMission(missionId: string): Promise<Result> {
+  const { supabase } = await requireUser();
 
-  if (pErr) return { error: pErr.message };
-  if (!participation) return { error: "Keine Anmeldung gefunden" };
-  if (participation.completed_at) return { error: "Bereits abgeschlossen" };
-
-  const { error: updErr } = await supabase
-    .from("mission_participants")
-    .update({
-      completed_at: new Date().toISOString(),
-      coins_earned: coinsEarned,
-      qr_verified: true,
-    })
-    .eq("id", participation.id);
-
-  if (updErr) return { error: updErr.message };
-
-  await supabase.from("karma_transactions").insert({
-    user_id: user.id,
-    amount: coinsEarned,
-    kind: "earn_mission",
-    reference_id: missionId,
-    description: "Mission abgeschlossen",
+  const { error } = await supabase.rpc("complete_mission", {
+    p_mission_id: missionId,
+    p_coins: 0,
   });
-
-  const { data: prof } = await supabase
-    .from("profiles")
-    .select("coins, total_coins_earned, missions_completed")
-    .eq("id", user.id)
-    .single();
-
-  if (prof) {
-    const newTotal = prof.total_coins_earned + coinsEarned;
-    const newLevel =
-      newTotal >= 1200 ? "Platin" :
-      newTotal >= 700 ? "Gold" :
-      newTotal >= 300 ? "Silber" : "Bronze";
-
-    await supabase
-      .from("profiles")
-      .update({
-        coins: prof.coins + coinsEarned,
-        total_coins_earned: newTotal,
-        missions_completed: prof.missions_completed + 1,
-        level: newLevel,
-      })
-      .eq("id", user.id);
-  }
+  if (error) return { error: error.message };
 
   revalidatePath("/app");
   revalidatePath("/app/profile");
@@ -100,44 +55,18 @@ export async function completeMission(
   return {};
 }
 
-export async function redeemReward(
-  rewardId: string,
-  coinCost: number,
-  title: string,
-): Promise<Result<{ code: string }>> {
-  const { supabase, user } = await requireUser();
+export async function redeemReward(rewardId: string): Promise<Result<{ code: string }>> {
+  const { supabase } = await requireUser();
 
-  const { data: prof, error: profErr } = await supabase
-    .from("profiles")
-    .select("coins")
-    .eq("id", user.id)
-    .single();
-
-  if (profErr) return { error: profErr.message };
-  if (!prof || prof.coins < coinCost) {
-    return { error: "Nicht genug Karma-Punkte" };
-  }
-
-  const code = `KC-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000 + 1000)}`;
-
-  const { error: redErr } = await supabase
-    .from("reward_redemptions")
-    .insert({ user_id: user.id, reward_id: rewardId, code });
-
-  if (redErr) return { error: redErr.message };
-
-  await supabase.from("karma_transactions").insert({
-    user_id: user.id,
-    amount: -coinCost,
-    kind: "spend_reward",
-    reference_id: rewardId,
-    description: `Eingelöst: ${title}`,
+  const { data, error } = await supabase.rpc("redeem_reward", {
+    p_reward_id: rewardId,
+    p_coin_cost: 0,
+    p_title: "",
   });
+  if (error) return { error: error.message };
 
-  await supabase
-    .from("profiles")
-    .update({ coins: prof.coins - coinCost })
-    .eq("id", user.id);
+  const code = (data as { code: string }[] | null)?.[0]?.code;
+  if (!code) return { error: "Einlösung fehlgeschlagen" };
 
   revalidatePath("/app/rewards");
   revalidatePath("/app");

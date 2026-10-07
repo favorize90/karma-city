@@ -21,11 +21,11 @@ export function RewardsClient({ rewards, redemptions: initialRedemptions }: Prop
   const [error, setError] = useState<string | null>(null);
   const [, startTransition] = useTransition();
 
-  const handleRedeem = (rewardId: string, coinCost: number, title: string) => {
+  const handleRedeem = (rewardId: string) => {
     setError(null);
     setPendingId(rewardId);
     startTransition(async () => {
-      const result = await redeemReward(rewardId, coinCost, title);
+      const result = await redeemReward(rewardId);
       setPendingId(null);
       if (result.error) {
         setError(result.error);
@@ -157,7 +157,7 @@ export function RewardsClient({ rewards, redemptions: initialRedemptions }: Prop
                             onClick={() =>
                               canAfford &&
                               !isPending &&
-                              handleRedeem(reward.id, reward.coin_cost, reward.title)
+                              handleRedeem(reward.id)
                             }
                             disabled={!canAfford || isPending}
                             className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-medium transition ${

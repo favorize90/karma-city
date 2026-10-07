@@ -15,23 +15,19 @@ Rules for whoever edits this file (a human, before the run starts):
 
 ---
 
-## Seeded from the current state of the repo
+## Tonight
 
-These are real gaps found in the tree, ordered so each builds on the last.
-Replace or reorder them to match what you actually want built tonight.
+Ordered so the tester can see what the loop changes before the loop changes
+it. The signed-in smoke test comes first: without it every `/app/*` route
+only has to "redirect or render" and a broken dashboard still passes.
 
-- [ ] **Partner terminal validates a real redemption code.**
-      `src/app/partner/page.tsx` scans a code and jumps straight to a success
-      screen; nothing is checked against the database. Look up the scanned
-      code in `redemptions`, reject unknown or already-redeemed codes with a
-      German error state, and stamp `redeemed_at` on success.
-      Verify: an unknown code shows the error state; a valid code can only
-      be redeemed once.
-
-- [ ] **Partner terminal stats come from the database.**
-      The three counters in the terminal header are hardcoded (`83`, etc.).
-      Read them for the signed-in partner instead.
-      Verify: the counters change after a redemption lands.
+- [ ] **Smoke test covers the signed-in path.**
+      `scripts/smoke.mjs` currently accepts a redirect on every `/app/*`
+      route, so a logged-in regression is invisible. Add a mode that signs in
+      with a seeded test account when `SMOKE_TEST_EMAIL` /
+      `SMOKE_TEST_PASSWORD` are set, and assert the dashboard renders.
+      Verify: with credentials set, `/app` returns 200 and contains the
+      Karma balance; without them, the run skips that block and stays green.
 
 - [ ] **Admin dashboard reads real data.**
       `src/app/admin/page.tsx` imports `missions`, `communityMembers`,
@@ -57,10 +53,26 @@ Replace or reorder them to match what you actually want built tonight.
       Verify: `grep -rn "from \"@/data/mockData\"" src/` returns only type
       and label imports.
 
-- [ ] **Smoke test covers the signed-in path.**
-      `scripts/smoke.mjs` currently accepts a redirect on every `/app/*`
-      route, so a logged-in regression is invisible. Add a mode that signs in
-      with a seeded test account when `SMOKE_TEST_EMAIL` /
-      `SMOKE_TEST_PASSWORD` are set, and assert the dashboard renders.
-      Verify: with credentials set, `/app` returns 200 and contains the
-      Karma balance; without them, the run skips that block and stays green.
+## Needs a human first
+
+Blocked on a product or security decision, not on code. The loop skips
+these; they come back once the decision is written into the item.
+
+- [blocked] **Partner terminal validates a real redemption code.**
+      There is no partner role yet, so any signed-in user could stamp any
+      code. Decide who counts as a partner (table of partner accounts per
+      business? invite codes?) before building validation on top.
+
+- [blocked] **Partner terminal stats come from the database.**
+      Depends on the item above — "the signed-in partner" doesn't exist yet.
+
+- [blocked] **Missions need a real proof of completion.**
+      Since 0007, `complete_mission` pays the mission's database value and no
+      longer claims `qr_verified`, but a user can still self-report any
+      mission they joined. Decide the proof (QR code at the location,
+      organizer confirms, time window) before building it.
+
+- [blocked] **Leaderboard exposes every profile column to every user.**
+      `profiles_leaderboard_select` lets any signed-in user read all profiles
+      in full, including `full_name`, `interests` and `district`. Decide which
+      fields are public, then expose only those (a view or column grants).

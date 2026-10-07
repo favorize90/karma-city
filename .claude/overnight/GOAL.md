@@ -50,6 +50,11 @@ Non-negotiable for every agent in the loop:
   eslint-disable, no deleting an assertion, no dropping a route from the
   smoke list. Removing the thing that caught the problem disarms every
   remaining iteration of the night.
+- **The Karma economy is server-authoritative.** Coin amounts, prices,
+  levels and the ledger are written only by the `complete_mission` /
+  `redeem_reward` RPCs, which read values from the database. Never grant
+  clients write access to those columns, never send a price or reward from
+  the client, and never delete or loosen a check in `supabase/tests/`.
 - **Migrations are append-only.** Existing files in `supabase/migrations/`
   may already be applied to a live database — add a new numbered file
   instead of editing one.

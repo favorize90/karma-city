@@ -16,9 +16,13 @@ on immediately.
 
 ## How to work
 
-1. Run `scripts/verify.sh`. It executes typecheck → lint → build → smoke and
-   stops at the first failure. It writes `.claude/overnight/last-verify.md`
-   and per-stage logs under `.claude/overnight/logs/`.
+1. Run `scripts/verify.sh`. It executes typecheck → lint → db → build →
+   smoke and stops at the first failure. It writes
+   `.claude/overnight/last-verify.md` and per-stage logs under
+   `.claude/overnight/logs/`. The db stage (RLS and RPC security suite) only
+   runs when `TEST_DATABASE_URL` is set. If the diff touches
+   `supabase/` or `src/lib/db/` and that stage was skipped, report RED: an
+   unchecked change to the coin economy is not green.
 2. If it is green, check the *substance* too. A build passing is not the same
    as the backlog item working. Read the diff (`git diff`) against what the
    item claimed, and exercise the behaviour where you can from the shell —

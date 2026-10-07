@@ -34,11 +34,16 @@ resetting every prompt.
 | `.claude/commands/overnight.md` | One iteration: build → test → fix → land or roll back. |
 | `scripts/verify.sh` | The success condition: typecheck → lint → build → smoke. |
 | `scripts/smoke.mjs` | Boots the production build and walks the real routes. |
+| `scripts/test-db.sh` | Applies every migration to a throwaway Postgres and runs the RLS/RPC security suite in `supabase/tests/`. |
 
 ## Starting a run
 
 ```bash
 npm ci                    # the loop assumes node_modules exists
+# a throwaway Postgres for the db stage (never a Supabase project)
+docker run --rm -d -p 5432:5432 -e POSTGRES_HOST_AUTH_METHOD=trust postgres:16
+export TEST_DATABASE_URL=postgres://postgres@localhost:5432/postgres
+
 npm run verify            # confirm you're starting from green
 ```
 
